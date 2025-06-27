@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html>
 <head>
   <title>GRAciarnia 2025 Więcej przygód, więcej kości, mniej rozsądku</title>
@@ -22,7 +21,7 @@
     text-align: center;
     padding: 20px;
     background-color: #f2f2f2;
-    color: #000; /* poprawiłem na czarny, bo wcześniej było białe i niewidoczne na jasnym tle */
+    color: #fff;
     font-size: 24px;
     font-weight: bold;
     margin-bottom: 160px;
@@ -168,38 +167,33 @@
   <!-- Część 3: Sponsorzy -->
   <div class="sponsorzy">
     <img src="https://graciarniachrzanow.prv.pl/GRAciarnia.png" alt="Logo">
+    
   </div>
 
   <script>
     var inputField = document.getElementById("searchTerm");
     var searchButton = document.getElementById("searchButton");
 
+    // Funkcja do obsługi przycisku
     searchButton.addEventListener("click", function() {
-      var searchTerm = inputField.value.trim();
+      var searchTerm = inputField.value;
       search(searchTerm);
     });
 
+    // Funkcja do obsługi zmian w polu tekstowym
     inputField.addEventListener("input", function() {
-      var searchTerm = inputField.value.trim();
+      var searchTerm = inputField.value;
       search(searchTerm);
     });
 
+    // Funkcja wyszukiwania i wyświetlania wyników
     function search(searchTerm) {
-      var resultsDiv = document.getElementById("results");
-      resultsDiv.innerHTML = "Ładowanie...";
-
-      fetch("https://script.google.com/macros/s/AKfycbwUScL-fRnoPUG_Dg3eC1-oZxVwEqHZJZDib9O0IcSGFAvXsid9IBssPJdx18LaAJRm/exec?search=" + encodeURIComponent(searchTerm))
-        .then(response => response.json())
-        .then(displayResults)
-        .catch(error => {
-          console.error("Błąd:", error);
-          resultsDiv.innerHTML = "Wystąpił błąd podczas pobierania danych.";
-        });
+      google.script.run.withSuccessHandler(displayResults).getResultsFromSheet(searchTerm);
     }
 
     function displayResults(results) {
       var resultsDiv = document.getElementById("results");
-      resultsDiv.innerHTML = "";
+      resultsDiv.innerHTML = ""; // Wyczyść poprzednie wyniki
 
       if (results && results.length > 0) {
         var tableHTML = "<table border='1'><tr><th>Nazwa</th><th>Dostępność</th></tr>";
@@ -215,6 +209,7 @@
       }
     }
 
+    // Ustaw tytuł strony po załadowaniu treści
     document.addEventListener("DOMContentLoaded", function() {
       document.title = "GRAciarnia 2025 Więcej przygód, więcej kości, mniej rozsądku";
       search("");
@@ -222,3 +217,5 @@
   </script>
 </body>
 </html>
+
+
