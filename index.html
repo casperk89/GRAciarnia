@@ -1,40 +1,195 @@
 <!DOCTYPE html>
-<html lang="pl">
+<html>
 <head>
-  <meta charset="UTF-8" />
   <title>GRAciarnia 2025 Więcej przygód, więcej kości, mniej rozsądku</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <style>
-    body { font-family: Arial, sans-serif; padding: 20px; }
-    input, button { padding: 10px; font-size: 16px; }
-    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
-    th { background: #eee; }
-  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&display=swap" rel="stylesheet">
+
+  <base target="_top">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://www.gstatic.com/charts/loader.js"></script>
+<style>
+
+  body {
+      font-family: "Almarai", sans-serif;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+  }
+
+  .header {
+    text-align: center;
+    padding: 20px;
+    background-color: #f2f2f2;
+    color: #000; /* poprawiłem na czarny, bo wcześniej było białe i niewidoczne na jasnym tle */
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 160px;
+    margin: 0 auto;
+    max-width: 100%;
+  }
+
+ .search-container {
+    text-align: center;
+    padding: 20px;
+    background-color: #f7f7f7;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 160px;
+    margin: 0 auto;
+    max-width: 100%;
+    padding-bottom: 100px;
+  }
+
+ .przycisk {
+    align-items: center;
+    appearance: none;
+    background-image: linear-gradient(to bottom, #4CAF50, #3e8e41);
+    border: none;
+    border-radius: 6px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    color: #fff;
+    cursor: pointer;
+    display: inline-flex;
+    font-family: "Almarai", sans-serif;
+    font-size: 18px;
+    height: 28px;
+    justify-content: center;
+    line-height: 1;
+    list-style: none;
+    overflow: hidden;
+    padding-left: 20px;
+    padding-right: 20px;
+    position: relative;
+    text-align: left;
+    text-decoration: none;
+    transition: box-shadow 0.2s, transform 0.2s;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    white-space: nowrap;
+    will-change: box-shadow, transform;
+  }
+
+ .przycisk:hover {
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+    transform: translateY(-2px);
+  }
+
+ .przycisk:active {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    transform: translateY(2px);
+  }
+
+ .sponsorzy {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    padding: 5px;
+    background-color: #fff;
+    border-top: 1px solid #ddd;
+    margin-bottom: 160px;
+    margin: 0 auto;
+    max-width: 100%;
+  }
+
+  .results-container {
+    display: flex;
+    justify-content: center;
+  }
+
+  table {
+    text-align: center;
+    border-collapse: collapse;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  th, td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+    align-items: center;
+  }
+
+  th {
+    background-color: #f0f0f0;
+  }
+
+  tr:nth-child(even) {
+    background-color: #f7f7f7;
+  }
+
+  /* Media Queries */
+  @media (max-width: 768px) {
+    .header img, .sponsorzy img {
+      width: 100%;
+    }
+    .search-container {
+      padding: 15px;
+      width: 100%;
+    }
+    .przycisk {
+      font-size: 16px;
+      padding-left: 15px;
+      padding-right: 15px;
+    }
+  }
+  
+  @media (min-width: 769px) {
+    .header img, .sponsorzy img {
+      width: 40%;
+    }
+    .search-container {
+      width: 50%;
+    }
+  }
+</style>
 </head>
 <body>
+  <!-- Część 1: Logo -->
+  <div class="header">
+    <img src="https://graciarniachrzanow.prv.pl/logo2025.png" alt="Logo">
+  </div>
 
-  <h1>Wyszukiwarka gier</h1>
-  <input type="text" id="searchTerm" placeholder="Wpisz nazwę gry..." />
-  <button id="searchButton">Szukaj</button>
+  <!-- Część 2: Wyszukiwarka -->
+  <div class="search-container">
+    <label for="searchTerm">Wprowadź nazwę gry, której szukasz:</label>
+    <input type="text" id="searchTerm">
+    <button class="przycisk" role="button" id="searchButton">Szukaj</button>
 
-  <div id="results"></div>
+    <div id="results" class="results-container"></div>
+  </div>
+
+  <!-- Część 3: Sponsorzy -->
+  <div class="sponsorzy">
+    <img src="https://graciarniachrzanow.prv.pl/GRAciarnia.png" alt="Logo">
+  </div>
 
   <script>
-    const webAppUrl = "https://script.google.com/macros/s/AKfycbwUScL-fRnoPUG_Dg3eC1-oZxVwEqHZJZDib9O0IcSGFAvXsid9IBssPJdx18LaAJRm/exec";
+    var inputField = document.getElementById("searchTerm");
+    var searchButton = document.getElementById("searchButton");
 
-    const inputField = document.getElementById("searchTerm");
-    const searchButton = document.getElementById("searchButton");
-    const resultsDiv = document.getElementById("results");
+    searchButton.addEventListener("click", function() {
+      var searchTerm = inputField.value.trim();
+      search(searchTerm);
+    });
 
-    function performSearch(searchTerm) {
+    inputField.addEventListener("input", function() {
+      var searchTerm = inputField.value.trim();
+      search(searchTerm);
+    });
+
+    function search(searchTerm) {
+      var resultsDiv = document.getElementById("results");
       resultsDiv.innerHTML = "Ładowanie...";
 
-      fetch(webAppUrl + "?search=" + encodeURIComponent(searchTerm))
-        .then(response => {
-          if (!response.ok) throw new Error("Błąd HTTP: " + response.status);
-          return response.json();
-        })
+      fetch("https://script.google.com/macros/s/AKfycbwUScL-fRnoPUG_Dg3eC1-oZxVwEqHZJZDib9O0IcSGFAvXsid9IBssPJdx18LaAJRm/exec?search=" + encodeURIComponent(searchTerm))
+        .then(response => response.json())
         .then(displayResults)
         .catch(error => {
           console.error("Błąd:", error);
@@ -43,30 +198,27 @@
     }
 
     function displayResults(results) {
-      if (!results || results.length === 0) {
+      var resultsDiv = document.getElementById("results");
+      resultsDiv.innerHTML = "";
+
+      if (results && results.length > 0) {
+        var tableHTML = "<table border='1'><tr><th>Nazwa</th><th>Dostępność</th></tr>";
+
+        for (var i = 0; i < results.length; i++) {
+          tableHTML += "<tr><td>" + results[i][0] + "</td><td>" + results[i][1] + "</td></tr>";
+        }
+
+        tableHTML += "</table>";
+        resultsDiv.innerHTML = tableHTML;
+      } else {
         resultsDiv.innerHTML = "Brak pasujących elementów.";
-        return;
       }
-      let tableHTML = "<table><tr><th>Nazwa</th><th>Dostępność</th></tr>";
-      results.forEach(row => {
-        tableHTML += `<tr><td>${row[0]}</td><td>${row[1]}</td></tr>`;
-      });
-      tableHTML += "</table>";
-      resultsDiv.innerHTML = tableHTML;
     }
 
-    searchButton.addEventListener("click", () => performSearch(inputField.value.trim()));
-
-    inputField.addEventListener("keydown", e => {
-      if (e.key === "Enter") {
-        performSearch(inputField.value.trim());
-      }
-    });
-
-    document.addEventListener("DOMContentLoaded", () => {
-      performSearch("");
+    document.addEventListener("DOMContentLoaded", function() {
+      document.title = "GRAciarnia 2025 Więcej przygód, więcej kości, mniej rozsądku";
+      search("");
     });
   </script>
-
 </body>
 </html>
