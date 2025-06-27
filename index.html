@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <title>GRAciarnia 2025 Więcej przygód, więcej kości, mniej rozsądku</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    input, button { padding: 10px; font-size: 16px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+    th { background: #eee; }
+  </style>
+</head>
+<body>
+
+  <h1>Wyszukiwarka gier</h1>
+  <input type="text" id="searchTerm" placeholder="Wpisz nazwę gry..." />
+  <button id="searchButton">Szukaj</button>
+
+  <div id="results"></div>
+
+  <script>
+    const webAppUrl = "https://script.google.com/macros/s/AKfycbwUScL-fRnoPUG_Dg3eC1-oZxVwEqHZJZDib9O0IcSGFAvXsid9IBssPJdx18LaAJRm/exec";
+
+    const inputField = document.getElementById("searchTerm");
+    const searchButton = document.getElementById("searchButton");
+    const resultsDiv = document.getElementById("results");
+
+    function performSearch(searchTerm) {
+      resultsDiv.innerHTML = "Ładowanie...";
+
+      fetch(webAppUrl + "?search=" + encodeURIComponent(searchTerm))
+        .then(response => {
+          if (!response.ok) throw new Error("Błąd HTTP: " + response.status);
+          return response.json();
+        })
+        .then(displayResults)
+        .catch(error => {
+          console.error("Błąd:", error);
+          resultsDiv.innerHTML = "Wystąpił błąd podczas pobierania danych.";
+        });
+    }
+
+    function displayResults(results) {
+      if (!results || results.length === 0) {
+        resultsDiv.innerHTML = "Brak pasujących elementów.";
+        return;
+      }
+      let tableHTML = "<table><tr><th>Nazwa</th><th>Dostępność</th></tr>";
+      results.forEach(row => {
+        tableHTML += `<tr><td>${row[0]}</td><td>${row[1]}</td></tr>`;
+      });
+      tableHTML += "</table>";
+      resultsDiv.innerHTML = tableHTML;
+    }
+
+    searchButton.addEventListener("click", () => performSearch(inputField.value.trim()));
+
+    inputField.addEventListener("keydown", e => {
+      if (e.key === "Enter") {
+        performSearch(inputField.value.trim());
+      }
+    });
+
+    document.addEventListener("DOMContentLoaded", () => {
+      performSearch("");
+    });
+  </script>
+
+</body>
+</html>
